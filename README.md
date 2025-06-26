@@ -84,22 +84,6 @@ dotnet ef database update --project src/Healink.Infrastructure --startup-project
 dotnet ef migrations remove --project src/Healink.Infrastructure --startup-project src/Healink.API
 ```
 
-## 🏃 Development
-
-### Build solution
-```bash
-dotnet build
-```
-
-### Run với watch mode
-```bash
-dotnet watch run --project src/Healink.API
-```
-
-### Run tests
-```bash
-dotnet test
-```
 
 ## 📄 License
 
