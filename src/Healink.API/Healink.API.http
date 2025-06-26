@@ -1,0 +1,6 @@
+@Healink.API_HostAddress = http://localhost:5150
+
+GET {{Healink.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

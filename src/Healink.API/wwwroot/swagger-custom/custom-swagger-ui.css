@@ -1,0 +1,85 @@
+/* Custom Swagger UI Styles for Healink */
+
+.swagger-ui .info .title {
+    color: #2c5aa0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.swagger-ui .info .description {
+    color: #666;
+}
+
+.swagger-ui .topbar {
+    background-color: #2c5aa0;
+    border-bottom: 1px solid #1a3a6b;
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label {
+    color: white;
+}
+
+.swagger-ui .topbar .download-url-wrapper input[type=text] {
+    border: 1px solid #1a3a6b;
+}
+
+.swagger-ui .btn.authorize {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.swagger-ui .btn.authorize:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.swagger-ui .opblock.opblock-post {
+    background: rgba(73, 204, 144, 0.1);
+    border-color: #49cc90;
+}
+
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+    background: #49cc90;
+}
+
+.swagger-ui .opblock.opblock-get {
+    background: rgba(97, 175, 254, 0.1);
+    border-color: #61affe;
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+    background: #61affe;
+}
+
+.swagger-ui .opblock.opblock-put {
+    background: rgba(252, 161, 48, 0.1);
+    border-color: #fca130;
+}
+
+.swagger-ui .opblock.opblock-put .opblock-summary-method {
+    background: #fca130;
+}
+
+.swagger-ui .opblock.opblock-delete {
+    background: rgba(249, 62, 62, 0.1);
+    border-color: #f93e3e;
+}
+
+.swagger-ui .opblock.opblock-delete .opblock-summary-method {
+    background: #f93e3e;
+}
+
+.swagger-ui .scheme-container {
+    background: #fff;
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    margin: 20px 0;
+    padding: 20px;
+}
+
+.swagger-ui .loading-container {
+    background: #2c5aa0;
+}
+
+.swagger-ui .loading-container .loading:after {
+    border-color: transparent transparent white white;
+} 
