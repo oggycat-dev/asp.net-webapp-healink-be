@@ -35,12 +35,6 @@ src/
 
 ## 🚀 Bắt đầu
 
-### Yêu cầu hệ thống
-
-- .NET 8.0 SDK
-- SQL Server (LocalDB hoặc SQL Server Instance)
-- Visual Studio 2022 hoặc VS Code
-
 ### Cài đặt
 
 1. **Clone repository**
@@ -72,85 +66,6 @@ dotnet run --project src/Healink.API
    - API: `https://localhost:7xxx` hoặc `http://localhost:5xxx`
    - Swagger UI: `https://localhost:7xxx/swagger`
 
-## 👥 Tài khoản mặc định
-
-Hệ thống sẽ tự động tạo tài khoản admin khi khởi động:
-
-- **Email**: admin@healink.com
-- **Password**: Admin123!
-- **Role**: Admin
-
-## 🔗 API Endpoints
-
-### Staff Management
-
-- `GET /api/staff` - Lấy danh sách staff (với phân trang và tìm kiếm)
-- `POST /api/staff` - Tạo staff mới
-
-#### Tạo Staff mới
-
-```json
-POST /api/staff
-{
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@healink.com",
-  "phoneNumber": "0123456789",
-  "dateOfBirth": "1990-01-01",
-  "gender": 1,
-  "address": "123 Main St",
-  "department": "IT",
-  "position": "Developer",
-  "employeeId": "EMP001",
-  "hireDate": "2023-01-01",
-  "password": "Password123!"
-}
-```
-
-#### Lấy danh sách Staff
-
-```
-GET /api/staff?pageNumber=1&pageSize=10&searchTerm=john&department=IT&status=1
-```
-
-## 🗄️ Cấu trúc Database
-
-### Bảng chính
-
-- **AspNetUsers** - Thông tin đăng nhập (Identity)
-- **AspNetRoles** - Phân quyền hệ thống
-- **StaffProfiles** - Thông tin chi tiết staff
-
-### Roles
-
-- **Admin**: Quản trị viên hệ thống
-- **Staff**: Nhân viên
-
-## 🔧 Cấu hình
-
-### JWT Settings (appsettings.json)
-
-```json
-{
-  "Jwt": {
-    "Key": "your-secret-key-here-must-be-at-least-32-characters-long",
-    "Issuer": "Healink.API",
-    "Audience": "Healink.Client",
-    "DurationInMinutes": 60,
-    "RefreshTokenDurationInDays": 7
-  }
-}
-```
-
-### Connection String
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=HealinkDb;Trusted_Connection=true;MultipleActiveResultSets=true"
-  }
-}
-```
 
 ## 📝 Migrations
 
@@ -186,28 +101,7 @@ dotnet watch run --project src/Healink.API
 dotnet test
 ```
 
-## 📋 TODO
-
-- [ ] Thêm Authentication JWT
-- [ ] Thêm Authorization middleware
-- [ ] Thêm logging
-- [ ] Thêm unit tests
-- [ ] Thêm integration tests
-- [ ] Thêm API versioning
-- [ ] Thêm health checks
-
-## 🤝 Đóng góp
-
-1. Fork repository
-2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Tạo Pull Request
-
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## 📞 Liên hệ
-
-Dự án được tạo ra cho mục đích học tập và nghiên cứu. 
