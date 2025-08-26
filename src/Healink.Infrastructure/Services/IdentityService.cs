@@ -421,4 +421,54 @@ public class IdentityService : IIdentityService
         
         return Result.Success("Password reset successfully");
     }
+    
+    /// <summary>
+    /// Find a user by email (simplified)
+    /// </summary>
+    public async Task<AppUser?> FindUserByEmailAsync(string email)
+    {
+        return await _userManager.FindByEmailAsync(email);
+    }
+    
+    /// <summary>
+    /// Find a user by username (simplified)
+    /// </summary>
+    public async Task<AppUser?> FindUserByUsernameAsync(string username)
+    {
+        return await _userManager.FindByNameAsync(username);
+    }
+    
+    /// <summary>
+    /// Create a new user with basic information
+    /// </summary>
+    public async Task<Result<AppUser>> CreateUserAsync(string username, string email, string password, string? phoneNumber = null)
+    {
+        try
+        {
+            var user = new AppUser
+            {
+                UserName = username,
+                Email = email,
+                PhoneNumber = phoneNumber,
+                EmailConfirmed = false,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+            
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description).ToList();
+                return Result<AppUser>.Failure("User creation failed", ErrorCode.ValidationFailed, errors);
+            }
+            
+            return Result<AppUser>.Success(user);
+        }
+        catch (Exception ex)
+        {
+            return Result<AppUser>.Failure($"An error occurred while creating user: {ex.Message}", ErrorCode.InternalServerError);
+        }
+    }
 } 

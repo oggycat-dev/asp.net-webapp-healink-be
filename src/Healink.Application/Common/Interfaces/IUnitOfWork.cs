@@ -14,9 +14,34 @@ public interface IUnitOfWork : IDisposable
     IHealinkDbContext BusinessContext { get; }
 
     /// <summary>
+    /// The identity/application context
+    /// </summary>
+    IApplicationDbContext ApplicationContext { get; }
+
+    /// <summary>
     /// The staff profile repository
     /// </summary>
     IStaffProfileRepository StaffProfileRepository { get; }
+
+    /// <summary>
+    /// The podcast repository
+    /// </summary>
+    IPodcastRepository PodcastRepository { get; }
+
+    /// <summary>
+    /// The podcast category repository
+    /// </summary>
+    IPodcastCategoryRepository PodcastCategoryRepository { get; }
+
+    /// <summary>
+    /// The user profile repository
+    /// </summary>
+    IUserProfileRepository UserProfileRepository { get; }
+
+    /// <summary>
+    /// The podcast play history repository
+    /// </summary>
+    IPodcastPlayHistoryRepository PodcastPlayHistoryRepository { get; }
 
     /// <summary>
     /// Begin a transaction
@@ -42,4 +67,14 @@ public interface IUnitOfWork : IDisposable
     /// Save changes on business context
     /// </summary>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Save changes on application context (Identity)
+    /// </summary>
+    Task<int> SaveApplicationChangesAsync(CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Save changes on both contexts with transaction coordination
+    /// </summary>
+    Task<int> SaveAllChangesAsync(CancellationToken cancellationToken = default);
 } 

@@ -1,0 +1,200 @@
+# =============================================================================
+# HEALINK HEALTHCARE MANAGEMENT SYSTEM - ENVIRONMENT CONFIGURATION
+# =============================================================================
+
+# =============================================================================
+# DATABASE CONFIGURATION
+# =============================================================================
+# Main database connection string (SQL Server LocalDB for development)
+CONNECTION_STRING=Server=(localdb)\\mssqllocaldb;Database=HealinkDb;Trusted_Connection=true;MultipleActiveResultSets=true
+
+# =============================================================================
+# JWT AUTHENTICATION SETTINGS
+# =============================================================================
+JWT_SECRET=HealinkSuperSecretKeyForJWTTokenGenerationAndValidation12345678901234567890!@#$%
+JWT_SECRET_KEY=HealinkSuperSecretKeyForJWTTokenGenerationAndValidation12345678901234567890!@#$%
+JWT_ISSUER=Healink
+JWT_AUDIENCE=HealinkUsers
+JWT_EXPIRES_IN_MINUTES=60
+REFRESH_TOKEN_EXPIRES_IN_DAYS=7
+
+# =============================================================================
+# CORS SETTINGS
+# =============================================================================
+FRONTEND_URL=http://localhost:3000
+CORS_ALLOW_ANY_ORIGIN=true
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:4200,https://localhost:3000,https://localhost:4200
+
+# =============================================================================
+# ENVIRONMENT CONFIGURATION
+# =============================================================================
+ASPNETCORE_ENVIRONMENT=Development
+
+# =============================================================================
+# SECURITY SETTINGS
+# =============================================================================
+REQUIRE_HTTPS=false
+
+# =============================================================================
+# SYSTEM INFORMATION
+# =============================================================================
+SYSTEM_NAME=Healink
+
+# =============================================================================
+# ADMIN ACCOUNT CONFIGURATION
+# =============================================================================
+ADMIN_EMAIL=admin@healink.com
+ADMIN_PASSWORD=Admin123!
+ADMIN_USERNAME=admin
+
+# =============================================================================
+# STORAGE CONFIGURATION
+# =============================================================================
+# Available providers: LocalStorage, AmazonS3, AzureBlob
+STORAGE_PROVIDER_TYPE=LocalStorage
+STORAGE_BASE_URL=http://localhost:5000
+LOCAL_STORAGE_ROOT_PATH=wwwroot/uploads
+LOCAL_STORAGE_MAX_FILE_SIZE=10485760
+LOCAL_STORAGE_ALLOWED_EXTENSIONS=.jpg,.jpeg,.png,.gif,.bmp,.pdf,.doc,.docx,.xls,.xlsx,.txt
+
+# AWS S3 Configuration (if using S3)
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET_NAME=healink-files
+AWS_S3_REGION=ap-southeast-1
+AWS_S3_USE_HTTPS=true
+AWS_S3_MAX_FILE_SIZE=52428800
+
+# Azure Blob Storage Configuration (if using Azure)
+AZURE_STORAGE_CONNECTION_STRING=
+AZURE_STORAGE_CONTAINER_NAME=healink-files
+
+# =============================================================================
+# EMAIL CONFIGURATION (SMTP)
+# =============================================================================
+# AWS S3 Configuration
+AWS_ACCESS_KEY_ID=your_aws_access_key_here
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key_here
+AWS_REGION=us-east-1
+AWS_S3_BUCKET_NAME=healink-files
+STORAGE_BASE_URL=https://healink-files.s3.amazonaws.com
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USE_SSL=true
+SMTP_USERNAME=
+SMTP_PASSWORD=
+SMTP_FROM_EMAIL=noreply@healink.com
+SMTP_FROM_NAME=Healink Healthcare System
+BACKEND_URL=http://localhost:5000
+
+# =============================================================================
+# LOGGING CONFIGURATION
+# =============================================================================
+LOG_LEVEL=Information
+LOG_FILE_PATH=Logs/healink.log
+LOG_RETENTION_DAYS=30
+
+# =============================================================================
+# HEALTHCARE SPECIFIC SETTINGS
+# =============================================================================
+# Patient management settings
+MAX_APPOINTMENTS_PER_DAY=50
+APPOINTMENT_DURATION_MINUTES=30
+APPOINTMENT_BUFFER_MINUTES=15
+
+# Medical record settings
+MEDICAL_RECORD_RETENTION_YEARS=10
+PRESCRIPTION_VALIDITY_DAYS=30
+
+# Staff management settings
+STAFF_SESSION_TIMEOUT_MINUTES=480
+STAFF_PASSWORD_EXPIRY_DAYS=90
+
+# =============================================================================
+# NOTIFICATION SETTINGS
+# =============================================================================
+# Email notifications
+ENABLE_EMAIL_NOTIFICATIONS=true
+APPOINTMENT_REMINDER_HOURS=24
+PRESCRIPTION_EXPIRY_REMINDER_DAYS=7
+
+# SMS notifications (if implemented)
+SMS_PROVIDER=
+SMS_API_KEY=
+SMS_SENDER_ID=HEALINK
+
+# =============================================================================
+# EXTERNAL API INTEGRATIONS
+# =============================================================================
+# Health insurance API (if applicable)
+INSURANCE_API_ENDPOINT=
+INSURANCE_API_KEY=
+
+# Pharmacy integration API (if applicable)
+PHARMACY_API_ENDPOINT=
+PHARMACY_API_KEY=
+
+# Laboratory integration API (if applicable)
+LAB_API_ENDPOINT=
+LAB_API_KEY=
+
+# =============================================================================
+# PAYMENT INTEGRATION (if applicable)
+# =============================================================================
+# VNPay Configuration (Vietnam Payment Gateway)
+VNPAY_TMN_CODE=
+VNPAY_HASH_SECRET=
+VNPAY_PAYMENT_URL=https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+VNPAY_RETURN_URL=http://localhost:5000/api/payment/vnpay-return
+VNPAY_TIMEOUT_MINUTES=15
+
+# =============================================================================
+# BACKUP AND MAINTENANCE
+# =============================================================================
+# Database backup settings
+BACKUP_ENABLED=true
+BACKUP_SCHEDULE_CRON=0 2 * * *
+BACKUP_RETENTION_DAYS=30
+BACKUP_STORAGE_PATH=Backups/
+
+# =============================================================================
+# DEVELOPMENT TOOLS
+# =============================================================================
+# Swagger/OpenAPI documentation
+ENABLE_SWAGGER=true
+SWAGGER_TITLE=Healink Healthcare API
+SWAGGER_VERSION=v1
+
+# Development database seeding
+ENABLE_DATA_SEEDING=true
+SEED_SAMPLE_DATA=true
+
+# =============================================================================
+# MIGRATION COMMANDS REFERENCE
+# =============================================================================
+# Add migration for identity context
+# dotnet ef migrations add InitialIdentity --project Healink.Infrastructure --startup-project Healink.API --context ApplicationDbContext
+
+# Add migration for business context  
+# dotnet ef migrations add InitialBusiness --project Healink.Infrastructure --startup-project Healink.API --context HealinkDbContext
+
+# Apply migrations
+# dotnet ef database update --project Healink.Infrastructure --startup-project Healink.API --context ApplicationDbContext
+# dotnet ef database update --project Healink.Infrastructure --startup-project Healink.API --context HealinkDbContext
+
+# Create new migration
+# dotnet ef migrations add [MigrationName] --project Healink.Infrastructure --startup-project Healink.API --context [ContextName]
+
+# Remove last migration (if not applied)
+# dotnet ef migrations remove --project Healink.Infrastructure --startup-project Healink.API --context [ContextName]
+
+# =============================================================================
+# USAGE INSTRUCTIONS
+# =============================================================================
+# 1. Copy this file to src/Healink.API/.env
+# 2. Update the values according to your environment
+# 3. Never commit .env files to version control
+# 4. Add .env to your .gitignore file
+# 5. For production, use environment variables or Azure Key Vault
+# =============================================================================

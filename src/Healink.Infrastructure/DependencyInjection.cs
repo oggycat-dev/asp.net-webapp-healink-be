@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Healink.Application.Common.Interfaces;
 using Healink.Application.Common.Interfaces.Repositories;
+using Healink.Application.Common.Interfaces.Services;
 using Healink.Domain.Entities.Identity;
 using Healink.Infrastructure.Persistence;
 using Healink.Infrastructure.Services;
@@ -11,6 +12,8 @@ using Healink.Infrastructure.Models;
 using Healink.Infrastructure.Repositories;
 using Healink.Infrastructure.Configurations;
 using Healink.Application.Common.Models;
+using Amazon.S3;
+using Amazon;
 
 namespace Healink.Infrastructure;
 
@@ -131,6 +134,10 @@ public static class DependencyInjection
 
         // Register repositories
         services.AddScoped<IStaffProfileRepository, StaffProfileRepository>();
+        services.AddScoped<IPodcastRepository, PodcastRepository>();
+        services.AddScoped<IPodcastCategoryRepository, PodcastCategoryRepository>();
+        services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+        services.AddScoped<IPodcastPlayHistoryRepository, PodcastPlayHistoryRepository>();
 
         // Register Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -139,6 +146,29 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IPodcastService, PodcastService>();
+        services.AddScoped<IPodcastCategoryService, PodcastCategoryService>();
+        services.AddScoped<IFileStorageService, FileStorageService>();
+        services.AddScoped<IMoodRecommendationService, MoodRecommendationService>();
+
+        // Register AWS S3
+        services.AddSingleton<IAmazonS3>(provider =>
+        {
+            var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+            var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+            var region = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
+
+            if (!string.IsNullOrEmpty(accessKey) && !string.IsNullOrEmpty(secretKey))
+            {
+                return new AmazonS3Client(accessKey, secretKey, RegionEndpoint.GetBySystemName(region));
+            }
+            
+            // Use default AWS credentials chain (IAM roles, environment variables, etc.)
+            return new AmazonS3Client(RegionEndpoint.GetBySystemName(region));
+        });
+
+        // Register AutoMapper
+        services.AddAutoMapper(typeof(DependencyInjection).Assembly);
 
         return services;
     }

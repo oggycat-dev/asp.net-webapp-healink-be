@@ -99,6 +99,21 @@ public interface IIdentityService
     /// Find a user by email
     /// </summary>
     Task<Result<AppUser?>> FindByEmailAsync(string email);
+    
+    /// <summary>
+    /// Find a user by email (simplified)
+    /// </summary>
+    Task<AppUser?> FindUserByEmailAsync(string email);
+    
+    /// <summary>
+    /// Find a user by username (simplified)
+    /// </summary>
+    Task<AppUser?> FindUserByUsernameAsync(string username);
+    
+    /// <summary>
+    /// Create a new user with basic information
+    /// </summary>
+    Task<Result<AppUser>> CreateUserAsync(string username, string email, string password, string? phoneNumber = null);
 
     /// <summary>
     /// Update a user's information in the Identity system

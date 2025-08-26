@@ -1,11 +1,14 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 using Healink.Application.Common.DTOs.Auth;
 using Healink.Application.Features.Auth.Commands.Login;
 using Healink.Application.Features.Auth.Commands.RefreshToken;
 using Healink.Application.Features.Auth.Commands.Logout;
+using Healink.Application.Features.Auth.Commands.Register;
 using Healink.API.Middlewares;
+using Healink.API.Extensions;
 
 namespace Healink.API.Controllers;
 
@@ -57,21 +60,23 @@ public class AuthController : ControllerBase
                 _logger.LogWarning("Login failed for user: {Username}. Reason: {Error}", 
                     request.Username, result.Message);
                 
-                return result.StatusCode switch
-                {
-                    401 => Unauthorized(new { message = result.Message }),
-                    403 => Forbid(),
-                    _ => BadRequest(new { message = result.Message })
-                };
+                return this.FromResult(result);
             }
 
             _logger.LogInformation("Login successful for user: {Username}", request.Username);
-            return Ok(result.Data);
+            return this.Success(result.Data, "Login successful");
+        }
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning("Validation failed for login: {Username}. Errors: {Errors}", 
+                request.Username, string.Join(", ", ex.Errors.Select(e => e.ErrorMessage)));
+            
+            return this.ValidationError(ex);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during login for user: {Username}", request.Username);
-            return StatusCode(500, new { message = "An internal server error occurred" });
+            return this.InternalServerError();
         }
     }
 
@@ -104,21 +109,23 @@ public class AuthController : ControllerBase
                 _logger.LogWarning("Token refresh failed for user: {UserId}. Reason: {Error}", 
                     request.UserId, result.Message);
                 
-                return result.StatusCode switch
-                {
-                    401 => Unauthorized(new { message = result.Message }),
-                    404 => NotFound(new { message = result.Message }),
-                    _ => BadRequest(new { message = result.Message })
-                };
+                return this.FromResult(result);
             }
 
             _logger.LogInformation("Token refresh successful for user: {UserId}", request.UserId);
-            return Ok(result.Data);
+            return this.Success(result.Data, "Token refreshed successfully");
+        }
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning("Validation failed for token refresh: {UserId}. Errors: {Errors}", 
+                request.UserId, string.Join(", ", ex.Errors.Select(e => e.ErrorMessage)));
+            
+            return this.ValidationError(ex);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during token refresh for user: {UserId}", request.UserId);
-            return StatusCode(500, new { message = "An internal server error occurred" });
+            return this.InternalServerError();
         }
     }
 
@@ -140,16 +147,69 @@ public class AuthController : ControllerBase
             if (!result.IsSuccess)
             {
                 _logger.LogWarning("Logout failed. Reason: {Error}", result.Message);
-                return BadRequest(new { message = result.Message });
+                return this.FromResult(result);
             }
 
             _logger.LogInformation("Logout successful");
-            return Ok(new { message = "Logged out successfully" });
+            return this.Success("Logged out successfully");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during logout");
-            return StatusCode(500, new { message = "An internal server error occurred" });
+            return this.InternalServerError();
+        }
+    }
+
+    /// <summary>
+    /// Register a new user account
+    /// </summary>
+    /// <param name="request">User registration request</param>
+    /// <returns>Registration response</returns>
+    [HttpPost("register")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(UserRegistrationResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("Registration attempt for user: {Username} with email: {Email}", 
+                request.Username, request.Email);
+
+            var command = new RegisterCommand
+            {
+                Username = request.Username,
+                Email = request.Email,
+                Password = request.Password,
+                ConfirmPassword = request.ConfirmPassword,
+                PhoneNumber = request.PhoneNumber
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+                _logger.LogWarning("Registration failed for user: {Username}. Reason: {Error}", 
+                    request.Username, result.Message);
+                
+                return this.FromResult(result);
+            }
+
+            _logger.LogInformation("Registration successful for user: {Username}", request.Username);
+            return this.Created(result.Data, "User registered successfully");
+        }
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning("Validation failed for user registration: {Username}. Errors: {Errors}", 
+                request.Username, string.Join(", ", ex.Errors.Select(e => e.ErrorMessage)));
+            
+            return this.ValidationError(ex);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during registration for user: {Username}", request.Username);
+            return this.InternalServerError();
         }
     }
 
@@ -178,12 +238,12 @@ public class AuthController : ControllerBase
                 EntityId = entityId
             };
 
-            return Ok(userInfo);
+            return this.Success(userInfo, "User information retrieved successfully");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting current user information");
-            return StatusCode(500, new { message = "An internal server error occurred" });
+            return this.InternalServerError();
         }
     }
 } 

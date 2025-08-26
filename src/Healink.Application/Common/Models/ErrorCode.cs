@@ -9,7 +9,9 @@ public enum ErrorCode
     InternalError = 1000,
     InternalServerError = 1000, // Alias for InternalError
     ValidationFailed = 1001,
+    ValidationError = 1001, // Alias for ValidationFailed
     InvalidInput = 1002,
+    BadRequest = 1002, // Alias for InvalidInput
     NotFound = 1003,
     Unauthorized = 1004,
     Forbidden = 1005,

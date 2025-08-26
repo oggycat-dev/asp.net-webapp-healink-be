@@ -19,4 +19,9 @@ public interface ICurrentUserService
     /// Check if user is authenticated
     /// </summary>
     bool IsAuthenticated { get; }
+    
+    /// <summary>
+    /// Check if current user is in a specific role
+    /// </summary>
+    bool IsInRole(string role);
 } 
